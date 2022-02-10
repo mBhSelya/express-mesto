@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+// eslint-disable-next-line prefer-regex-literals
+const urlPattern = new RegExp('^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w.-]+)+[\\w\\-._~:/?#[\\]@!$&\'()*+,;=.]+$');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -9,14 +11,20 @@ const cardSchema = new mongoose.Schema({
   },
   link: {
     type: String,
+    validate: {
+      validator: (value) => urlPattern.test(value),
+      message: 'Поле "link" должно быть валидным url-адресом.',
+    },
     required: true,
   },
   owner: {
-    type: mongoose.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
     required: true,
   },
   likes: [{
-    type: mongoose.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
     default: [],
   }],
   createdAt: {

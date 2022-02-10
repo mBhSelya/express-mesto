@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const validator = require('validator');
-const NotFoundError = require('../errors/not-found-error');
 const UnauthorizedError = require('../errors/unauthorized-error');
 
 // eslint-disable-next-line prefer-regex-literals
@@ -24,7 +23,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     validate: {
       validator: (value) => urlPattern.test(value),
-      message: 'Поле "link" должно быть валидным url-адресом.',
+      message: 'Поле "avatar" должно быть валидным url-адресом.',
     },
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
   },
@@ -41,7 +40,6 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: 8,
     select: false,
   },
 });
@@ -60,7 +58,7 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
     .select('+password')
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь не найден');
+        throw new UnauthorizedError('Неправильный email или пароль');
       }
       return bcrypt
         .compare(password, user.password)

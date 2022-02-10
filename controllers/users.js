@@ -77,8 +77,6 @@ function updateUser(req, res, next) {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
-      } else if (err.name === 'CastError') {
-        next(new BadRequestError('Некорректные данные при обновлении данных пользователя'));
       } else {
         next(err);
       }
@@ -96,8 +94,6 @@ function updateAvatar(req, res, next) {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
-      } else if (err.name === 'CastError') {
-        next(new BadRequestError('Некорректные данные при обновлении аватара'));
       } else {
         next(err);
       }
