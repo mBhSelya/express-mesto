@@ -18,7 +18,7 @@ function deleteCard(req, res, next) {
     .orFail(new NotFoundError(`Карточка с id ${cardId} не найдена`))
     .then((card) => {
       if (card.owner.equals(req.user._id)) {
-        next(new ForbiddenError('Недостаточно прав для удаления этой карточки'));
+        return next(new ForbiddenError('Недостаточно прав для удаления этой карточки'));
       }
       return card.remove();
     })

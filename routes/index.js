@@ -7,7 +7,7 @@ router.use('/', usersRouter);
 router.use('/', cardsRouter);
 
 router.use((req, res, next) => {
-  next(new NotFoundError());
+  next(new NotFoundError('Такой страницы не существует'));
 });
 
 module.exports = router;

@@ -7,8 +7,8 @@ const {
   likeCard,
   dislikeCard,
 } = require('../controllers/cards');
-// eslint-disable-next-line prefer-regex-literals
-const urlPattern = new RegExp('^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w.-]+)+[\\w\\-._~:/?#[\\]@!$&\'()*+,;=.]+$');
+
+const urlPattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&\\'()*+,;=.]+$/;
 
 router.get('/cards', getCards);
 router.post('/cards', celebrate({
@@ -16,26 +16,23 @@ router.post('/cards', celebrate({
     name: Joi.string().required().min(2).max(30),
     link: Joi.string().required().pattern(urlPattern),
   }),
-  query: Joi.object().keys({
-    owner: Joi.string().required(),
-  }),
 }), createCard);
 
 router.delete('/cards/:cardId', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required(),
+    cardId: Joi.string().length(24).hex().required(),
   }),
 }), deleteCard);
 
 router.put('/cards/:cardId/likes', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required(),
+    cardId: Joi.string().length(24).hex().required(),
   }),
 }), likeCard);
 
 router.delete('/cards/:cardId/likes', celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required(),
+    cardId: Joi.string().length(24).hex().required(),
   }),
 }), dislikeCard);
 

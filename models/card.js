@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-// eslint-disable-next-line prefer-regex-literals
-const urlPattern = new RegExp('^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w.-]+)+[\\w\\-._~:/?#[\\]@!$&\'()*+,;=.]+$');
+
+const urlPattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&\\'()*+,;=.]+$/;
 
 const cardSchema = new mongoose.Schema({
   name: {

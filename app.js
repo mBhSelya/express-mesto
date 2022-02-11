@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { celebrate, Joi } = require('celebrate');
+const { celebrate, Joi, errors } = require('celebrate');
 const routes = require('./routes');
 const errorHandler = require('./middleware/error-handler');
 const auth = require('./middleware/auth');
@@ -12,8 +12,7 @@ const {
   login,
 } = require('./controllers/users');
 
-// eslint-disable-next-line prefer-regex-literals
-const urlPattern = new RegExp('^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w.-]+)+[\\w\\-._~:/?#[\\]@!$&\'()*+,;=.]+$');
+const urlPattern = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&\\'()*+,;=.]+$/;
 
 const app = express();
 
@@ -42,6 +41,7 @@ app.post('/signup', celebrate({
 
 app.use(auth);
 app.use(routes);
+app.use(errors());
 app.use(errorHandler);
 
 app.listen(PORT, () => {
